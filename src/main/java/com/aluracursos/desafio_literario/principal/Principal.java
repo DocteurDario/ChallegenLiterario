@@ -2,8 +2,10 @@ package com.aluracursos.desafio_literario.principal;
 
 import com.aluracursos.desafio_literario.model.Libro;
 import com.aluracursos.desafio_literario.model.LibroDTO;
+import com.aluracursos.desafio_literario.model.RespuestaApi;
 import com.aluracursos.desafio_literario.service.ConsumoAPI;
 import com.aluracursos.desafio_literario.service.ConvierteDatos;
+import com.aluracursos.desafio_literario.service.IConvierteDatos;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,7 +18,7 @@ public class Principal {
 
     private final String url_Base = "https://gutendex.com/books/?search=";
 
-    private ConvierteDatos conversor = new ConvierteDatos();
+    private IConvierteDatos conversor = new ConvierteDatos();
 
     private String nombreLibro;
 
@@ -77,9 +79,22 @@ public class Principal {
         var nombreLibro = teclado.nextLine();
         String url_completa = (url_Base + nombreLibro.replace(" ", "+"));
         var json = consumoAPI.obtenerDatos(url_completa );
-        LibroDTO libroDATO = conversor.obtenerDatos(json,LibroDTO.class);
 
-        System.out.println(libroDATO);
+        System.out.println("Contenido del json : " + json);
+        try {
+            LibroDTO libroDATO = conversor.obtenerDatos(json,LibroDTO.class);
+            RespuestaApi respuesta = conversor.obtenerDatos(json, RespuestaApi.class);
+
+            System.out.println(libroDATO);
+            System.out.println(respuesta.results().get(0));
+
+        } catch (Exception e){
+            System.out.println(e);
+        }
+
+
+
+
     }
 
     public void menu() {

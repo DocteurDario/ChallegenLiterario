@@ -2,17 +2,18 @@ package com.aluracursos.desafio_literario.model;
 
 import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.Column;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public record AutorDTO(
+        @JsonProperty("name")
+        String nombre, // en minúscula
 
-                @JsonAlias("name")
-                String Nombre,
+        @JsonProperty("birth_year")
+        Integer nacimiento, // como número y corregido
 
-                @JsonAlias("birth_year")
-                String nacimeinto,
-
-                @JsonAlias("death_year")
-                String fallecimiento) {
+        @JsonProperty("death_year")
+        Integer fallecimiento // como número
+){
 }

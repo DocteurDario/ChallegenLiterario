@@ -1,19 +1,20 @@
 package com.aluracursos.desafio_literario.model;
 
-import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import jakarta.persistence.Column;
-
+import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public record LibroDTO(
-        @JsonAlias("title")
+        @JsonProperty("title") // Usar @JsonProperty
         String titulo,
-        @JsonAlias("authors")
-        List<AutorDTO> authors, // lista de autores
-        @JsonAlias("languages")
-        List<String> languages, // lista de idiomas
-        @JsonAlias("download_count")
-        long descargas  ){
-}
+
+        @JsonProperty("authors") // Usar @JsonProperty
+        List<AutorDTO> authors,
+
+        @JsonProperty("languages") // Usar @JsonProperty
+        List<String> languages,
+
+        @JsonProperty("download_count") // Usar @JsonProperty
+        long descargas
+        ){ }
