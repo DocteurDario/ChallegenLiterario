@@ -1,17 +1,21 @@
 package com.aluracursos.desafio_literario.principal;
 
-import com.aluracursos.desafio_literario.model.Libro;
-import com.aluracursos.desafio_literario.model.LibroDTO;
-import com.aluracursos.desafio_literario.model.RespuestaApi;
+import com.aluracursos.desafio_literario.model.*;
+import com.aluracursos.desafio_literario.repository.AutorRepository;
+import com.aluracursos.desafio_literario.repository.LibroRepository;
 import com.aluracursos.desafio_literario.service.ConsumoAPI;
 import com.aluracursos.desafio_literario.service.ConvierteDatos;
 import com.aluracursos.desafio_literario.service.IConvierteDatos;
+import org.aspectj.apache.bcel.util.Repository;
+import org.springframework.beans.factory.annotation.Autowired;
 
+import javax.swing.text.html.parser.Parser;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
 public class Principal {
+    private final AutorRepository autorRepository;
     private Scanner teclado = new Scanner(System.in);
 
     private ConsumoAPI consumoAPI = new ConsumoAPI();
@@ -31,6 +35,13 @@ public class Principal {
 
     private Boolean salir = Boolean.FALSE;
 
+
+    private LibroRepository librorepository  ;
+
+    public Principal(LibroRepository repository, AutorRepository autorRepository) {
+        this.librorepository = repository;
+        this.autorRepository= autorRepository;
+    }
 
     public void menuPrincipal() throws Exception {
         //String url ="don+quijote";
@@ -80,13 +91,32 @@ public class Principal {
         String url_completa = (url_Base + nombreLibro.replace(" ", "+"));
         var json = consumoAPI.obtenerDatos(url_completa );
 
-        System.out.println("Contenido del json : " + json);
         try {
             LibroDTO libroDATO = conversor.obtenerDatos(json,LibroDTO.class);
             RespuestaApi respuesta = conversor.obtenerDatos(json, RespuestaApi.class);
 
-            System.out.println(libroDATO);
-            System.out.println(respuesta.results().get(0));
+            LibroDTO  libroDTOAux ;
+            AutorDTO autorDTO;
+            libroDTOAux = respuesta.results().get(0);
+            autorDTO = respuesta.results().get(0).authors().get(0);
+
+            Libro libro =new Libro();
+            Autor autor = new Autor();
+
+            libro.setTitulo(libroDTOAux.titulo());
+
+            autor.setNombre(autorDTO.nombre());
+            autor.setNacimeinto(String.valueOf(autorDTO.nacimiento()));
+            autor.setFallecimiento(String.valueOf((autorDTO.fallecimiento())));
+            libro.setAutor(autor);
+
+            libro.setDescargas(libroDTOAux.descargas());
+            libro.setIdiona(String.valueOf(libroDTOAux.languages().get(0)));
+
+            System.out.println(libro);
+
+            autorRepository.save(autor);
+            librorepository.save(libro);
 
         } catch (Exception e){
             System.out.println(e);

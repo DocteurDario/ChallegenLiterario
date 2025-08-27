@@ -35,6 +35,14 @@ public class Libro {
         this.descargas = descargas;
     }
 
+    public Libro(LibroDTO libroDTO) {
+        this.id = id;
+        this.titulo = titulo;
+        this.autor = autor;
+        this.idiona = idiona;
+        this.descargas = descargas;
+    }
+
     public int getId() {
         return id;
     }
