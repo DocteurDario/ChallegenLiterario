@@ -6,41 +6,41 @@ import com.aluracursos.desafio_literario.repository.LibroRepository;
 import com.aluracursos.desafio_literario.service.ConsumoAPI;
 import com.aluracursos.desafio_literario.service.ConvierteDatos;
 import com.aluracursos.desafio_literario.service.IConvierteDatos;
+import com.aluracursos.desafio_literario.service.LibroServicio;
 import org.aspectj.apache.bcel.util.Repository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import javax.swing.text.html.parser.Parser;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+@Component
 public class Principal {
     private final AutorRepository autorRepository;
+    private LibroRepository librorepository  ;
+    private final LibroServicio libroServicio;
+
     private Scanner teclado = new Scanner(System.in);
-
     private ConsumoAPI consumoAPI = new ConsumoAPI();
-
     private final String url_Base = "https://gutendex.com/books/?search=";
-
     private IConvierteDatos conversor = new ConvierteDatos();
+
+    private Boolean salir = Boolean.FALSE;
+    private int opcion;
 
     private String nombreLibro;
 
     private List<LibroDTO> libroDTO = new ArrayList<>();
-
     private List<Libro> libro = new ArrayList<>();
-
     private String json ;
-    private int opcion;
-
-    private Boolean salir = Boolean.FALSE;
 
 
-    private LibroRepository librorepository  ;
-
-    public Principal(LibroRepository repository, AutorRepository autorRepository) {
+    public Principal(LibroRepository repository, AutorRepository autorRepository, LibroServicio libroService) {
         this.librorepository = repository;
         this.autorRepository= autorRepository;
+        this.libroServicio = libroService;
     }
 
     public void menuPrincipal() throws Exception {
@@ -80,9 +80,16 @@ public class Principal {
     }
 
     private void listaDeAutores() {
+
+
     }
 
     private void listaDeTodosLosLibros() {
+        List<Libro> libros = libroServicio.traerLibros();
+        System.out.println("Listado de libros:");
+        libros.forEach( lib ->{
+                        System.out.println(lib.toString());
+        } );
     }
 
     private void busquedaDeLibroPorTítulo() {
