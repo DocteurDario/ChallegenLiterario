@@ -71,25 +71,20 @@ public class Principal {
                     break;
             }
         }
-
     }
 
     private void listarAutoresVivosEnDeterminadoAnio() throws Exception {
 
-
     }
 
     private void listaDeAutores() {
-
 
     }
 
     private void listaDeTodosLosLibros() {
         List<Libro> libros = libroServicio.traerLibros();
         System.out.println("Listado de libros:");
-        libros.forEach( lib ->{
-                        System.out.println(lib.toString());
-        } );
+        libros.forEach(System.out::println);
     }
 
     private void busquedaDeLibroPorTítulo() {
@@ -124,14 +119,9 @@ public class Principal {
 
             autorRepository.save(autor);
             librorepository.save(libro);
-
         } catch (Exception e){
             System.out.println(e);
         }
-
-
-
-
     }
 
     public void menu() {
